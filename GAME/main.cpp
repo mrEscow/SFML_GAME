@@ -13,14 +13,14 @@ int main()
 
     sf::RenderWindow window(sf::VideoMode(640, 480), "");
     window.setVerticalSyncEnabled(true);
-    ImGui::SFML::Init(window);
+    if(ImGui::SFML::Init(window)){}
 
     sf::Color bgColor;
     float color[3] = { 0.f, 0.f, 0.f };
 
     // здесь мы будем использовать массив char. Чтобы использовать
     // std::string нужно сделать действия, описанные во второй части
-    char windowTitle[255] = "ImGui + SFML = <3";
+    char windowTitle[255] = "ImGui + Entt + SFML = <3";
     window.setTitle(windowTitle);
 
     sf::Clock deltaClock;
