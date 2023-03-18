@@ -1,12 +1,16 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 
+#include <entt.hpp>
+
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
 
 int main()
 {
+    entt::registry registry;
+
     sf::RenderWindow window(sf::VideoMode(640, 480), "");
     window.setVerticalSyncEnabled(true);
     ImGui::SFML::Init(window);
