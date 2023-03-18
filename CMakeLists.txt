@@ -11,14 +11,22 @@ set(SFML_STATIC_LIBRARIES TRUE)
 find_package(SFML COMPONENTS graphics audio system REQUIRED)
 
 set(GAME_DIR "${CMAKE_SOURCE_DIR}/GAME")
+set(IMGUI_DIR "${CMAKE_SOURCE_DIR}/IMGUI")
 
-file(GLOB_RECURSE SOURCES
+file(GLOB_RECURSE GAME_SOURCES
     "${GAME_DIR}/*.h"
     "${GAME_DIR}/*.cpp"
 )
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+file(GLOB_RECURSE IMGUI_SOURCES
+    "${IMGUI_DIR}/*.h"
+    "${IMGUI_DIR}/*.cpp"
+)
+
+add_executable(${PROJECT_NAME} ${GAME_SOURCES} ${IMGUI_SOURCES})
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${GAME_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${IMGUI_DIR})
 
 target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-audio)
+
