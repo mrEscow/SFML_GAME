@@ -2,11 +2,20 @@ cmake_minimum_required(VERSION 3.5)
 
 project(SFML_GAME)
 
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SFML_DIR "${CMAKE_SOURCE_DIR}/SFML/lib/cmake/SFML")
-set(SFML_STATIC_LIBRARIES TRUE)
+IF (WIN32)
+    set(SFML_DIR "${CMAKE_SOURCE_DIR}/SFML/Windows/lib/cmake/SFML")
+    set(SFML_STATIC_LIBRARIES TRUE)
+ELSE()
+    set(SFML_DIR "${CMAKE_SOURCE_DIR}/SFML/Linux/lib/cmake/SFML")
+    find_package(OpenGL REQUIRED)
+    find_package(GLUT REQUIRED)
+    include_directories( ${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} )
+ENDIF()
+
 
 find_package(SFML COMPONENTS graphics audio system REQUIRED)
 
@@ -39,4 +48,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${IMGUI_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${ENTT_DIR})
 
 target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-audio)
-
+IF (WIN32)
+ELSE()
+    target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} )
+ENDIF()
