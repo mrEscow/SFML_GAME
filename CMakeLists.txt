@@ -17,7 +17,7 @@ ELSE()
 ENDIF()
 
 
-find_package(SFML COMPONENTS graphics audio system REQUIRED)
+find_package(SFML 2.5.1 COMPONENTS graphics audio system REQUIRED)
 
 set(GAME_DIR "${CMAKE_SOURCE_DIR}/GAME")
 set(IMGUI_DIR "${CMAKE_SOURCE_DIR}/IMGUI")
@@ -28,6 +28,8 @@ file(GLOB_RECURSE GAME_SOURCES
     "${ENTT_DIR}/*.hpp"
     "${GAME_DIR}/*.cpp"
 )
+
+
 
 file(GLOB_RECURSE IMGUI_SOURCES
     "${IMGUI_DIR}/*.h"
