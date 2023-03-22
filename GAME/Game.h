@@ -1,3 +1,6 @@
+#ifndef GAME_H
+#define GAME_H
+
 #include <entt.hpp>
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -6,20 +9,19 @@
 
 #include <vector>
 
-class AGameObject
-{
-public:
-    virtual void Action(){};
-    virtual void Update(){};
-    virtual void Draw(){};
-};
-
 
 class Game
 {
-    entt::registry registry;
 
-    sf::RenderWindow* window;
+public:
+    Game();
+
+    void play();
+
+    ~Game();
+
+private:
+    entt::registry registry;
 
     sf::Clock deltaClock;
 
@@ -29,12 +31,8 @@ class Game
 
     char windowTitle[255] = "ImGui + Entt + SFML = <3";
 
-    std::vector<AGameObject*> gameObjects;
+    std::vector<class AGameObject*> gameObjects;
 
-public:
-    Game();
-
-    void play();
-
-    ~Game();
 };
+
+#endif // GAME_H

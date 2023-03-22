@@ -1,51 +1,32 @@
 #include "Game.h"
 
-#include "SFML/Graphics/Sprite.hpp"
-#include "SFML/Graphics/Texture.hpp"
 
 #include "imgui.h"
 #include "imgui-SFML.h"
 
-#include <iostream>
-
-class BackGround : public AGameObject
-{
-    sf::RenderWindow* window;
-
-    sf::Sprite sprite;
-public:
-    BackGround(sf::RenderWindow* window){
-        this->window = window;
-
-        sf::Texture textura;
-        textura.loadFromFile("Images/BackGround.jpg");
-
-        sprite.setTexture(textura);
-    }
-
-    virtual void Draw() override{
-        window->draw(sprite);
-    };
-};
+#include "Window.h"
+#include "Define.h"
+#include "BackGround.h"
 
 Game::Game()
 {
-    window = new sf::RenderWindow(sf::VideoMode(640, 480), "");
-    window->setVerticalSyncEnabled(true);
-    if(ImGui::SFML::Init(*window)){}
-    window->setTitle(windowTitle);
 
-    gameObjects.push_back(new BackGround(window));
+    WND->setVerticalSyncEnabled(true);
+
+    if(ImGui::SFML::Init(*WND)){}
+    WND->setTitle(windowTitle);
+
+    gameObjects.push_back(new BackGround());
 }
 
 void Game::play(){
-    while (window->isOpen()) {
+    while (WND->isOpen()) {
         sf::Event event;
-        while (window->pollEvent(event)) {
+        while (WND->pollEvent(event)) {
             ImGui::SFML::ProcessEvent(event);
 
             if (event.type == sf::Event::Closed) {
-                window->close();
+                WND->close();
             }
 
             for(auto& object:gameObjects)
@@ -55,7 +36,7 @@ void Game::play(){
         for(auto& object:gameObjects)
             object->Update();
 
-        ImGui::SFML::Update(*window, deltaClock.restart());
+        ImGui::SFML::Update(*WND, deltaClock.restart());
 
         ImGui::Begin("Sample window"); // создаём окно
 
@@ -74,22 +55,25 @@ void Game::play(){
             // этот код выполняется, когда юзер жмёт на кнопку
             // здесь можно было бы написать
             // if(ImGui::InputText(...))
-            window->setTitle(windowTitle);
+            WND->setTitle(windowTitle);
         }
         ImGui::End(); // end window
 
-        window->clear(bgColor); // заполняем окно заданным цветом
+        WND->clear(bgColor); // заполняем окно заданным цветом
 
         for(auto& object:gameObjects)
             object->Draw();
 
-        ImGui::SFML::Render(*window);
-        window->display();
+        ImGui::SFML::Render(*WND);
+
+
+
+        WND->display();
     }
 
     ImGui::SFML::Shutdown();
 }
 
 Game::~Game(){
-    delete window;
+
 }
