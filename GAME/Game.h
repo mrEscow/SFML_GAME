@@ -32,7 +32,7 @@ private:
 
     char windowTitle[255] = "ImGui + Entt + SFML = <3";
 
-    std::vector<class AGameObject*> gameObjects;
+    std::vector<std::unique_ptr<class AGameObject>> gameObjects;
 
 };
 

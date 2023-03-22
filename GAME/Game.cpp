@@ -17,7 +17,7 @@ Game::Game()
     if(ImGui::SFML::Init(*WND)){}
     WND->setTitle(windowTitle);
 
-    gameObjects.push_back(new BackGround());
+    gameObjects.push_back(std::make_unique<BackGround>());
 }
 
 void Game::play(){
@@ -75,8 +75,5 @@ void Game::play(){
 
 Game::~Game()
 {
-    for(auto object : gameObjects)
-        delete object;
-
     gameObjects.clear();
 }
