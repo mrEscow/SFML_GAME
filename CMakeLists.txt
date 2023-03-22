@@ -23,6 +23,8 @@ set(GAME_DIR "${CMAKE_SOURCE_DIR}/GAME")
 set(IMGUI_DIR "${CMAKE_SOURCE_DIR}/IMGUI")
 set(ENTT_DIR "${CMAKE_SOURCE_DIR}/ENTT")
 
+configure_file("${GAME_DIR}/Images/BackGround.jpg" "Images/BackGround.jpg" COPYONLY)
+
 file(GLOB_RECURSE GAME_SOURCES
     "${GAME_DIR}/*.h"
     "${ENTT_DIR}/*.hpp"

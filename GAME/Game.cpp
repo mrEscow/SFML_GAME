@@ -6,6 +6,8 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 
+#include <iostream>
+
 class BackGround : public AGameObject
 {
     sf::RenderWindow* window;
@@ -14,8 +16,10 @@ class BackGround : public AGameObject
 public:
     BackGround(sf::RenderWindow* window){
         this->window = window;
+
         sf::Texture textura;
-        textura.loadFromFile("SFML_GAME/GAME/Images/BackGround.jpg"); // TODO THIS FIX IN FIRST TIME
+        textura.loadFromFile("Images/BackGround.jpg");
+
         sprite.setTexture(textura);
     }
 
