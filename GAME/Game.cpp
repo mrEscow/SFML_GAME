@@ -10,10 +10,7 @@
 #include "BackGround.h"
 
 Game::Game()
-{
-
-    WND->setVerticalSyncEnabled(true);
-
+{  
     if(ImGui::SFML::Init(*WND)){}
     WND->setTitle(windowTitle);
 
