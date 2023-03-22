@@ -8,6 +8,7 @@
 #include <SFML/Window/Event.hpp>
 
 #include <vector>
+#include <memory>
 
 
 class Game

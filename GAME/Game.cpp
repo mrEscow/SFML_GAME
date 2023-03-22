@@ -6,6 +6,7 @@
 
 #include "Window.h"
 #include "Define.h"
+#include "GameObject.h"
 #include "BackGround.h"
 
 Game::Game()
@@ -66,14 +67,16 @@ void Game::play(){
 
         ImGui::SFML::Render(*WND);
 
-
-
         WND->display();
     }
 
     ImGui::SFML::Shutdown();
 }
 
-Game::~Game(){
+Game::~Game()
+{
+    for(auto object : gameObjects)
+        delete object;
 
+    gameObjects.clear();
 }
