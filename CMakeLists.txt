@@ -28,6 +28,8 @@ configure_file("${GAME_DIR}/Images/BackGround.jpg" "Images/BackGround.jpg" COPYO
 configure_file("${GAME_DIR}/Images/Player/Rest/spritesheet.png" "Images/Player/Rest/spritesheet.png" COPYONLY)
 configure_file("${GAME_DIR}/Images/Player/Run/spritesheet.png" "Images/Player/Run/spritesheet.png" COPYONLY)
 
+configure_file("${GAME_DIR}/Images/Tiles/Green64x64_10.png" "Images/Tiles/Green64x64_10.png" COPYONLY)
+
 file(GLOB_RECURSE GAME_SOURCES
     "${GAME_DIR}/*.h"
     "${ENTT_DIR}/*.hpp"

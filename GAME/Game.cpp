@@ -8,6 +8,7 @@
 #include "Define.h"
 #include "GameObject.h"
 #include "BackGround.h"
+#include "Tile.h"
 #include "Player.h"
 
 Game::Game()
@@ -16,6 +17,13 @@ Game::Game()
     WND->setTitle(windowTitle);
 
     gameObjects.push_back(std::make_unique<BackGround>());
+
+
+    for (int i = 0; i < 5; ++i) {
+        sf::Vector2f pos = {static_cast<float>(250 + ( i* 64)) ,350};
+        gameObjects.push_back(std::make_unique<Tile>(pos));
+    }
+
     gameObjects.push_back(std::make_unique<Player>());
 }
 
