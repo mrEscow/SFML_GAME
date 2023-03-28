@@ -25,6 +25,9 @@ set(ENTT_DIR "${CMAKE_SOURCE_DIR}/ENTT")
 
 configure_file("${GAME_DIR}/Images/BackGround.jpg" "Images/BackGround.jpg" COPYONLY)
 
+configure_file("${GAME_DIR}/Images/Player/Rest/spritesheet.png" "Images/Player/Rest/spritesheet.png" COPYONLY)
+configure_file("${GAME_DIR}/Images/Player/Run/spritesheet.png" "Images/Player/Run/spritesheet.png" COPYONLY)
+
 file(GLOB_RECURSE GAME_SOURCES
     "${GAME_DIR}/*.h"
     "${ENTT_DIR}/*.hpp"

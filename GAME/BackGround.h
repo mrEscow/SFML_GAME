@@ -13,7 +13,7 @@ class BackGround : public AGameObject
 public:
     BackGround();
 
-    virtual void Draw() override;;
+    virtual void Draw() override;
 };
 
 #endif // BACKGROUND_H

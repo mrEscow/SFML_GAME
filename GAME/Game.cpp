@@ -8,6 +8,7 @@
 #include "Define.h"
 #include "GameObject.h"
 #include "BackGround.h"
+#include "Player.h"
 
 Game::Game()
 {  
@@ -15,10 +16,15 @@ Game::Game()
     WND->setTitle(windowTitle);
 
     gameObjects.push_back(std::make_unique<BackGround>());
+    gameObjects.push_back(std::make_unique<Player>());
 }
 
 void Game::play(){
     while (WND->isOpen()) {
+
+        float time = deltaClock.getElapsedTime().asMicroseconds();
+        time = time / 800;
+
         sf::Event event;
         while (WND->pollEvent(event)) {
             ImGui::SFML::ProcessEvent(event);
@@ -32,7 +38,7 @@ void Game::play(){
         }
 
         for(auto& object:gameObjects)
-            object->Update();
+            object->Update(time);
 
         ImGui::SFML::Update(*WND, deltaClock.restart());
 

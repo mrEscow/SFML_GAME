@@ -28,7 +28,7 @@ Window *Window::Get()
 sf::RenderWindow *Window::value() const{
 
     if(window == nullptr){
-        window = new sf::RenderWindow(sf::VideoMode(640,480), "");
+        window = new sf::RenderWindow(sf::VideoMode(900,500), "");
         window->setVerticalSyncEnabled(true);
     }
 

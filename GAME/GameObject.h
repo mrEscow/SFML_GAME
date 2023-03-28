@@ -6,11 +6,11 @@ class AGameObject
 public:
     virtual void Action(){};
 
-    virtual void Update(){};
+    virtual void Update(const float& time){};
 
     virtual void Draw(){};
 
-    virtual ~AGameObject();
+    //virtual ~AGameObject();
 };
 
 #endif // GAMEOBJECT_H
