@@ -8,8 +8,12 @@
 #include "Define.h"
 
 #include "GameObject.h"
+
 #include "BackGround.h"
+#include "Oblako.h"
+
 #include "Tile.h"
+
 #include "GreenWarior.h"
 #include "Robot.h"
 
@@ -43,6 +47,7 @@ Game::Game()
     WND->setTitle(windowTitle);
 
     gameObjects.push_back(std::make_unique<BackGround>());
+    gameObjects.push_back(std::make_unique<Oblako>());
 
 
     for (int i = 0; i < 5; ++i) {
