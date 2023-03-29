@@ -6,10 +6,13 @@
 
 #include "Window.h"
 #include "Define.h"
+
 #include "GameObject.h"
 #include "BackGround.h"
 #include "Tile.h"
 #include "GreenWarior.h"
+#include "Robot.h"
+
 #include "Player.h"
 
 
@@ -47,8 +50,15 @@ Game::Game()
         gameObjects.push_back(std::make_unique<Tile>(pos));
     }
 
+    for (int i = 0; i < 12; ++i) {
+        sf::Vector2f pos = {static_cast<float>((250 + 256) + ( i* 64)) ,606};
+        gameObjects.push_back(std::make_unique<Tile>(pos));
+    }
 
     gameObjects.push_back(std::make_unique<GreenWarior>());
+
+    gameObjects.push_back(std::make_unique<Robot>());
+
     gameObjects.push_back(std::make_unique<Player>());
 }
 
