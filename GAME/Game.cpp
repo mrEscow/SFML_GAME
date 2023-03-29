@@ -4,6 +4,8 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 
+#include "ResourcesManager.h"
+
 #include "Window.h"
 #include "Define.h"
 
@@ -42,7 +44,7 @@ char grid[16][32] = {
 };
 
 Game::Game()
-{  
+{
     if(ImGui::SFML::Init(*WND)){}
     WND->setTitle(windowTitle);
 

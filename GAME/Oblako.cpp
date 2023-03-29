@@ -3,14 +3,12 @@
 #include "Define.h"
 #include "Window.h"
 
+
 Oblako::Oblako()
 {
-    sf::Image image;
-    image.loadFromFile("Images/Dekor/Oblako.png");
+    image = RES->getImage("Oblako");
 
-    textura.loadFromImage(image);
-
-    sprite.setTexture(textura);
+    sprite.setTexture(image->textura);
 
     sprite.setPosition(1500, 100);
 }

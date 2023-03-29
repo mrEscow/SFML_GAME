@@ -2,6 +2,7 @@
 #include "Define.h"
 #include "Window.h"
 
+
 #include <SFML/Graphics.hpp>
 
 Player::Player()
