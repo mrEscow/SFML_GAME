@@ -33,13 +33,11 @@ ResourcesManager* ResourcesManager::Get()
 
 Image* ResourcesManager::getImage(std::string name)
 {
-        Image* image;
-
         for(auto tmp : images)
             if(tmp->name == name)
-                image = tmp;
+                return tmp;
 
-        return image;
+        return nullptr;
 }
 
 ResourcesManager::ResourcesManager()
@@ -166,10 +164,10 @@ void ResourcesManager::addTextura(std::filesystem::path path)
         }
     }
 
-    std::cout << "Name: " << name << std::endl;
-    std::cout << "FrameCount: " << frameCount << std::endl;
-    std::cout << "X: " << X << std::endl;
-    std::cout << "Y: " << Y << std::endl;
+//    std::cout << "Name: " << name << std::endl;
+//    std::cout << "FrameCount: " << frameCount << std::endl;
+//    std::cout << "X: " << X << std::endl;
+//    std::cout << "Y: " << Y << std::endl;
 
 
     Image* image = new Image();
@@ -180,10 +178,5 @@ void ResourcesManager::addTextura(std::filesystem::path path)
 
     image->textura.loadFromFile(path.string());
 
-
     images.push_back(image);
-
-
-    std::cout << "------" << std::endl;
-
 }

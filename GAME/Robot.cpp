@@ -5,13 +5,13 @@
 
 Robot::Robot()
 {
-    sf::Image image;
-    image.loadFromFile("Images/Enemy/Robot.png");
+    image = RES->getImage("RobotRides");
 
-    textura.loadFromImage(image);
+    if(!image)
+        return;
 
-    sprite.setTexture(textura);
-    sprite.setTextureRect(sf::IntRect(0, 0, 137, 136));
+    sprite.setTexture(image->textura);
+    sprite.setTextureRect(sf::IntRect(0, 0, image->X, image->Y));
     sprite.setPosition(1000, 480);
 }
 
@@ -21,10 +21,10 @@ void Robot::Update(const float &time)
 
     currentFrame += speedAnimation * time;
 
-    if (currentFrame > 16)
-        currentFrame -= 16;
+    if (currentFrame > image->frameCount)
+        currentFrame -=  image->frameCount;
 
-    sprite.setTextureRect(sf::IntRect(137 * int(currentFrame), 0, 137, 136));
+    sprite.setTextureRect(sf::IntRect(137 * int(currentFrame), 0,  image->X, image->Y));
 
     runTimer -= speedAnimation * time;
     if(runTimer < 0) runTimer = 100;

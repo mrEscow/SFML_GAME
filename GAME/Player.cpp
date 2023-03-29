@@ -7,29 +7,29 @@
 
 Player::Player()
 {
-    sf::Image image; //создаем объект Image (изображение)
+    imageREST = RES->getImage("PlayerRest");
 
-    image.loadFromFile("Images/Player/Rest/spritesheet.png");//загружаем в него файл
-    texturaREST.loadFromImage(image);//передаем в него объект Image (изображения)
+    if(!imageREST)
+        return;
 
-    image.loadFromFile("Images/Player/Run/spritesheet.png");//загружаем в него файл
-    texturaRUN.loadFromImage(image);//передаем в него объект Image (изображения)
+    imageRUN = RES->getImage("PlayerRun");
 
-
+    if(!imageRUN)
+        return;
 
     Stage = STAGE::REST;
 
     switch (Stage){
     case STAGE::REST:
-        sprite.setTexture(texturaREST);//передаём в него объект Texture (текстуры)
-        sprite.setTextureRect(sf::IntRect(0, 0, 65, 98));
+        sprite.setTexture(imageREST->textura);//передаём в него объект Texture (текстуры)
+        sprite.setTextureRect(sf::IntRect(0, 0, imageREST->X, imageREST->Y));
         sprite.setPosition(250, 250);
 
         break;
 
     case STAGE::RUN:
-        sprite.setTexture(texturaRUN);//передаём в него объект Texture (текстуры)
-        sprite.setTextureRect(sf::IntRect(0, 0, 58, 100));
+        sprite.setTexture(imageRUN->textura);//передаём в него объект Texture (текстуры)
+        sprite.setTextureRect(sf::IntRect(0, 0, imageRUN->X, imageRUN->Y));
         sprite.setPosition(250, 250);
 
         break;
@@ -44,21 +44,21 @@ void Player::Action()
     if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || (sf::Keyboard::isKeyPressed(sf::Keyboard::D)))) {
         Stage = STAGE::RUN;
         dir = 1;
-        sprite.setTexture(texturaRUN);//передаём в него объект Texture (текстуры)
-        sprite.setTextureRect(sf::IntRect(0, 0, 58, 100));
+        sprite.setTexture(imageRUN->textura);//передаём в него объект Texture (текстуры)
+        sprite.setTextureRect(sf::IntRect(0, 0, imageRUN->X, imageRUN->Y));
         sprite.setPosition(250, 250);
     }
     else if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || (sf::Keyboard::isKeyPressed(sf::Keyboard::A)))) {
         Stage = STAGE::RUN;
         dir = -1;
-        sprite.setTexture(texturaRUN);//передаём в него объект Texture (текстуры)
-        sprite.setTextureRect(sf::IntRect(58, 0, -58, 100));
+        sprite.setTexture(imageRUN->textura);//передаём в него объект Texture (текстуры)
+        sprite.setTextureRect(sf::IntRect(imageRUN->X, 0, -imageRUN->X, imageRUN->Y));
         sprite.setPosition(250, 250);
     }
     else{
         Stage = STAGE::REST;
-        sprite.setTexture(texturaREST);//передаём в него объект Texture (текстуры)
-        sprite.setTextureRect(sf::IntRect(0, 0, 65, 98));
+        sprite.setTexture(imageREST->textura);//передаём в него объект Texture (текстуры)
+        sprite.setTextureRect(sf::IntRect(0, 0, imageREST->X, imageREST->Y));
         sprite.setPosition(250, 250);
     }
 }
@@ -72,8 +72,8 @@ void Player::Update(const float& time)
     case STAGE::REST:
 
         currentFrame += speedAnimation * time ; //служит для прохождения по "кадрам". переменная доходит до трех суммируя произведение времени и скорости. изменив 0.005 можно изменить скорость анимации
-        if (currentFrame > 17) currentFrame -= 17; //проходимся по кадрам с первого по третий включительно. если пришли к третьему кадру - откидываемся назад.
-        sprite.setTextureRect(sf::IntRect(65 * int(currentFrame), 0, 65, 98)); //проходимся по координатам Х. получается 96,96*2,96*3 и опять 96
+        if (currentFrame > imageREST->frameCount) currentFrame -= imageREST->frameCount; //проходимся по кадрам с первого по третий включительно. если пришли к третьему кадру - откидываемся назад.
+        sprite.setTextureRect(sf::IntRect(imageREST->X * int(currentFrame), 0, imageREST->X, imageREST->Y)); //проходимся по координатам Х. получается 96,96*2,96*3 и опять 96
         //sprite.move(-0.1 * playerTime, 0);//происходит само движение персонажа влево
 
 
@@ -83,15 +83,15 @@ void Player::Update(const float& time)
 
         if(dir == 1){
             currentFrame += speedAnimation * time ; //служит для прохождения по "кадрам". переменная доходит до трех суммируя произведение времени и скорости. изменив 0.005 можно изменить скорость анимации
-            if (currentFrame > 26) currentFrame -= 26; //проходимся по кадрам с первого по третий включительно. если пришли к третьему кадру - откидываемся назад.
-            sprite.setTextureRect(sf::IntRect(58 * int(currentFrame), 0, 58, 100)); //проходимся по координатам Х. получается 96,96*2,96*3 и опять 96
+            if (currentFrame > imageRUN->frameCount) currentFrame -= imageRUN->frameCount; //проходимся по кадрам с первого по третий включительно. если пришли к третьему кадру - откидываемся назад.
+            sprite.setTextureRect(sf::IntRect(imageRUN->X * int(currentFrame), 0, imageRUN->X, imageRUN->Y)); //проходимся по координатам Х. получается 96,96*2,96*3 и опять 96
             //sprite.move(-0.1 * playerTime, 0);//происходит само движение персонажа влево
         }
 
         if(dir == -1){
             currentFrame += speedAnimation * time ; //служит для прохождения по "кадрам". переменная доходит до трех суммируя произведение времени и скорости. изменив 0.005 можно изменить скорость анимации
-            if (currentFrame > 25) currentFrame -= 25; //проходимся по кадрам с первого по третий включительно. если пришли к третьему кадру - откидываемся назад.
-            sprite.setTextureRect(sf::IntRect(58 * int(currentFrame) + 1, 0, -58, 100)); //проходимся по координатам Х. получается 96,96*2,96*3 и опять 96
+            if (currentFrame > imageRUN->frameCount) currentFrame -= imageRUN->frameCount; //проходимся по кадрам с первого по третий включительно. если пришли к третьему кадру - откидываемся назад.
+            sprite.setTextureRect(sf::IntRect(imageRUN->X * (int(currentFrame) + 1), 0, -imageRUN->X, imageRUN->Y)); //проходимся по координатам Х. получается 96,96*2,96*3 и опять 96
             //sprite.move(-0.1 * playerTime, 0);//происходит само движение персонажа влево
         }
 

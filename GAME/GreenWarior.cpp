@@ -5,13 +5,13 @@
 
 GreenWarior::GreenWarior()
 {
-    sf::Image image;
-    image.loadFromFile("Images/Enemy/GreenWariorFair.png");
+    image = RES->getImage("GreenWarriorAttack");
 
-    textura.loadFromImage(image);
+    if(!image)
+        return;
 
-    sprite.setTexture(textura);
-    sprite.setTextureRect(sf::IntRect(0, 0, 186, 189));
+    sprite.setTexture(image->textura);
+    sprite.setTextureRect(sf::IntRect(0, 0, image->X, image->Y));
     sprite.setPosition(370, 170);
 }
 
@@ -21,10 +21,10 @@ void GreenWarior::Update(const float &time)
 
     currentFrame += speedAnimation * time;
 
-    if (currentFrame > 24)
-        currentFrame -= 24;
+    if (currentFrame > image->frameCount)
+        currentFrame -= image->frameCount;
 
-    sprite.setTextureRect(sf::IntRect(186 * int(currentFrame), 0, 186, 189));
+    sprite.setTextureRect(sf::IntRect(image->X * int(currentFrame), 0, image->X, image->Y));
 }
 
 void GreenWarior::Draw()

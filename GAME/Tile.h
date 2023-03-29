@@ -3,14 +3,16 @@
 
 #include "GameObject.h"
 #include "SFML/Graphics/Sprite.hpp"
-#include "SFML/Graphics/Texture.hpp"
+#include "ResourcesManager.h"
 
 
 class Tile : public AGameObject
 {
-    sf::Texture textura;//создаем объект Texture (текстура)
+    Image* image;
+
     sf::Sprite sprite; //создаем объект Sprite(спрайт)
-public:
+
+public:    
     Tile(sf::Vector2f pos);
 
     // AGameObject interface

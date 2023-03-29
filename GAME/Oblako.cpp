@@ -8,6 +8,9 @@ Oblako::Oblako()
 {
     image = RES->getImage("Oblako");
 
+    if(!image)
+        return;
+
     sprite.setTexture(image->textura);
 
     sprite.setPosition(1500, 100);

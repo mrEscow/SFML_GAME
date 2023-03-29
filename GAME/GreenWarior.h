@@ -4,13 +4,12 @@
 #include "GameObject.h"
 
 #include "SFML/Graphics/Sprite.hpp"
-#include "SFML/Graphics/Texture.hpp"
+#include "ResourcesManager.h"
 
 
 class GreenWarior : public AGameObject
 {
-
-    sf::Texture textura;//создаем объект Texture (текстура)
+    Image* image;
 
     sf::Sprite sprite;
 

@@ -2,9 +2,7 @@
 #define OBLAKO_H
 
 #include "GameObject.h"
-
 #include "SFML/Graphics/Sprite.hpp"
-
 #include "ResourcesManager.h"
 
 class Oblako : public AGameObject

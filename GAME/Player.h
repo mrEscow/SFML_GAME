@@ -3,12 +3,12 @@
 
 #include "GameObject.h"
 #include "SFML/Graphics/Sprite.hpp"
-#include "SFML/Graphics/Texture.hpp"
+#include "ResourcesManager.h"
 
 class Player : public AGameObject
 {
-    sf::Texture texturaREST;//создаем объект Texture (текстура)
-    sf::Texture texturaRUN;//создаем объект Texture (текстура)
+    Image* imageREST;//создаем объект Texture (текстура)
+    Image* imageRUN;//создаем объект Texture (текстура)
     sf::Sprite sprite; //создаем объект Sprite(спрайт)
 
     float currentFrame = 0;//хранит текущий кадр

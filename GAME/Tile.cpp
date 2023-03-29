@@ -6,14 +6,13 @@
 
 Tile::Tile(sf::Vector2f pos)
 {
+    image = RES->getImage("GreenTiles");
 
-    sf::Image image; //создаем объект Image (изображение)
+    if(!image)
+        return;
 
-    image.loadFromFile("Images/Tiles/Green64x64_10.png");//загружаем в него файл
-    textura.loadFromImage(image);//передаем в него объект Image (изображения)
-
-    sprite.setTexture(textura);
-    sprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
+    sprite.setTexture(image->textura);
+    sprite.setTextureRect(sf::IntRect(0, 0, image->X, image->Y));
     sprite.setPosition(pos);
 }
 
