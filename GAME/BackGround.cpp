@@ -4,7 +4,7 @@
 
 BackGround::BackGround(){
     sf::Image image; //создаем объект Image (изображение)
-    image.loadFromFile("Images/BackGround.jpg");//загружаем в него файл
+    image.loadFromFile("Images/BackGround_1.png");//загружаем в него файл
     //image.createMaskFromColor(sf::Color(255, 255, 255)); // убирает лишний цвет
 
 
