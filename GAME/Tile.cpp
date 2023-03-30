@@ -4,7 +4,7 @@
 #include "Window.h"
 
 
-Tile::Tile(sf::Vector2f pos)
+Tile::Tile(sf::Vector2f pos, int gid)
 {
     image = RES->getImage("GreenTiles");
 
@@ -12,7 +12,7 @@ Tile::Tile(sf::Vector2f pos)
         return;
 
     sprite.setTexture(image->textura);
-    sprite.setTextureRect(sf::IntRect(0, 0, image->X, image->Y));
+    sprite.setTextureRect(sf::IntRect(image->X * gid, 0, image->X, image->Y));
     sprite.setPosition(pos);
 }
 

@@ -12,8 +12,8 @@ class Tile : public AGameObject
 
     sf::Sprite sprite; //создаем объект Sprite(спрайт)
 
-public:    
-    Tile(sf::Vector2f pos);
+public:
+    Tile(sf::Vector2f pos, int gid);
 
     // AGameObject interface
 public:

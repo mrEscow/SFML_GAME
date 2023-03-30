@@ -1,0 +1,15 @@
+{ "columns":10,
+ "image":"D:\/geekbrains\/QT\/Sfml_Game\/GAME\/Images\/Tiles\/GreenTiles_10_64_64.png",
+ "imageheight":64,
+ "imagewidth":640,
+ "margin":0,
+ "name":"GreenTiles_10_64_64",
+ "objectalignment":"topleft",
+ "spacing":0,
+ "tilecount":10,
+ "tiledversion":"1.4.3",
+ "tileheight":64,
+ "tilewidth":64,
+ "type":"tileset",
+ "version":1.4
+}
