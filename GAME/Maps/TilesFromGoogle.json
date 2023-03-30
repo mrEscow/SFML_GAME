@@ -1,0 +1,14 @@
+{ "columns":16,
+ "image":"..\/..\/..\/..\/..\/AI\/TilesFromGoogle.png",
+ "imageheight":1024,
+ "imagewidth":1024,
+ "margin":0,
+ "name":"TilesFromGoogle",
+ "spacing":0,
+ "tilecount":256,
+ "tiledversion":"1.4.3",
+ "tileheight":64,
+ "tilewidth":64,
+ "type":"tileset",
+ "version":1.4
+}

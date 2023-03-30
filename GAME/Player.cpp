@@ -7,105 +7,110 @@
 
 Player::Player()
 {
-    imageREST = RES->getImage("PlayerRest");
-
-    if(!imageREST)
-        return;
-
-    imageRUN = RES->getImage("PlayerRun");
-
-    if(!imageRUN)
-        return;
-
     Stage = STAGE::REST;
 
-    switch (Stage){
-    case STAGE::REST:
-        sprite.setTexture(imageREST->textura);//передаём в него объект Texture (текстуры)
-        sprite.setTextureRect(sf::IntRect(0, 0, imageREST->X, imageREST->Y));
-        sprite.setPosition(250, 250);
+    setImageDate("PlayerRest");
 
-        break;
 
-    case STAGE::RUN:
-        sprite.setTexture(imageRUN->textura);//передаём в него объект Texture (текстуры)
-        sprite.setTextureRect(sf::IntRect(0, 0, imageRUN->X, imageRUN->Y));
-        sprite.setPosition(250, 250);
+    sprite.setPosition(250, 250);
 
-        break;
-
-    default:
-        break;
-    }
+    onGround = true;
 }
 
 void Player::Action()
 {
     if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || (sf::Keyboard::isKeyPressed(sf::Keyboard::D)))) {
-        Stage = STAGE::RUN;
+        Stage = STAGE::RUNonRIght;
+        setImageDate("PlayerRun");
         dir = 1;
-        sprite.setTexture(imageRUN->textura);//передаём в него объект Texture (текстуры)
-        sprite.setTextureRect(sf::IntRect(0, 0, imageRUN->X, imageRUN->Y));
-        sprite.setPosition(250, 250);
+
     }
     else if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || (sf::Keyboard::isKeyPressed(sf::Keyboard::A)))) {
-        Stage = STAGE::RUN;
+        Stage = STAGE::RUNonLEFT;
+        setImageDate("PlayerRun");
         dir = -1;
-        sprite.setTexture(imageRUN->textura);//передаём в него объект Texture (текстуры)
-        sprite.setTextureRect(sf::IntRect(imageRUN->X, 0, -imageRUN->X, imageRUN->Y));
-        sprite.setPosition(250, 250);
+
+    }
+    else if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || (sf::Keyboard::isKeyPressed(sf::Keyboard::W))) && (onGround)) {
+        Stage = STAGE::JUMP;
+        setImageDate("PlayerRun");
+        dir = 0;
+        dy = -0.18;
+        onGround = false;
     }
     else{
         Stage = STAGE::REST;
-        sprite.setTexture(imageREST->textura);//передаём в него объект Texture (текстуры)
-        sprite.setTextureRect(sf::IntRect(0, 0, imageREST->X, imageREST->Y));
-        sprite.setPosition(250, 250);
+        setImageDate("PlayerRest");
+        dir = 0;
+
     }
 }
 
 void Player::Update(const float& time)
 {
-    float speedAnimation =  0.05f;
+
+    currentFrame += speedAnimation * time ;
 
     switch (Stage) {
 
     case STAGE::REST:
-
-        currentFrame += speedAnimation * time ; //служит для прохождения по "кадрам". переменная доходит до трех суммируя произведение времени и скорости. изменив 0.005 можно изменить скорость анимации
-        if (currentFrame > imageREST->frameCount) currentFrame -= imageREST->frameCount; //проходимся по кадрам с первого по третий включительно. если пришли к третьему кадру - откидываемся назад.
-        sprite.setTextureRect(sf::IntRect(imageREST->X * int(currentFrame), 0, imageREST->X, imageREST->Y)); //проходимся по координатам Х. получается 96,96*2,96*3 и опять 96
-        //sprite.move(-0.1 * playerTime, 0);//происходит само движение персонажа влево
-
-
+        dir = 0;
+        if (currentFrame > image->frameCount) currentFrame -= image->frameCount;
+        sprite.setTextureRect(sf::IntRect(image->X * int(currentFrame) , 0,  image->X, image->Y));
         break;
 
-    case STAGE::RUN:
+    case STAGE::RUNonRIght:
+        dir = 1;
+        if (currentFrame > image->frameCount) currentFrame -= image->frameCount;
+        sprite.setTextureRect(sf::IntRect(image->X * int(currentFrame) , 0,  image->X, image->Y));
+        break;
 
-        if(dir == 1){
-            currentFrame += speedAnimation * time ; //служит для прохождения по "кадрам". переменная доходит до трех суммируя произведение времени и скорости. изменив 0.005 можно изменить скорость анимации
-            if (currentFrame > imageRUN->frameCount) currentFrame -= imageRUN->frameCount; //проходимся по кадрам с первого по третий включительно. если пришли к третьему кадру - откидываемся назад.
-            sprite.setTextureRect(sf::IntRect(imageRUN->X * int(currentFrame), 0, imageRUN->X, imageRUN->Y)); //проходимся по координатам Х. получается 96,96*2,96*3 и опять 96
-            //sprite.move(-0.1 * playerTime, 0);//происходит само движение персонажа влево
-        }
+    case STAGE::RUNonLEFT:
+        dir = -1;
+        if (currentFrame > image->frameCount - 1 ) currentFrame -= image->frameCount - 1;
+        sprite.setTextureRect(sf::IntRect(image->X * (int(currentFrame) + 1) , 0,  -image->X, image->Y));
+        break;
 
-        if(dir == -1){
-            currentFrame += speedAnimation * time ; //служит для прохождения по "кадрам". переменная доходит до трех суммируя произведение времени и скорости. изменив 0.005 можно изменить скорость анимации
-            if (currentFrame > imageRUN->frameCount) currentFrame -= imageRUN->frameCount; //проходимся по кадрам с первого по третий включительно. если пришли к третьему кадру - откидываемся назад.
-            sprite.setTextureRect(sf::IntRect(imageRUN->X * (int(currentFrame) + 1), 0, -imageRUN->X, imageRUN->Y)); //проходимся по координатам Х. получается 96,96*2,96*3 и опять 96
-            //sprite.move(-0.1 * playerTime, 0);//происходит само движение персонажа влево
-        }
-
-
-
+    case STAGE::JUMP:
+        dir = 0;
+        if (currentFrame > image->frameCount) currentFrame -= image->frameCount;
+        sprite.setTextureRect(sf::IntRect(image->X * int(currentFrame) , 0,  image->X, image->Y));
         break;
 
     default:
         break;
 
     }
+
+    checkCollicionWithMap();
+
+    if(onGround) dy = 0;
+    else dy = dy + 0.00015 * time;
+
+    sprite.move(dir * dx * speedMove, dy * speedMove);
 }
 
 void Player::Draw()
 {
     WND->draw(sprite);
 }
+
+void Player::setImageDate(std::string imageName)
+{
+    image = RES->getImage(imageName);
+
+    if(!image){
+        std::cout << "IMGE ERROR! " << " PLAYER" << "NAME: " << imageName;
+        return;
+    }
+
+    sprite.setTexture(image->textura);
+    sprite.setTextureRect(sf::IntRect(0, 0, image->X, image->Y));
+}
+
+void Player::checkCollicionWithMap()
+{
+
+
+}
+

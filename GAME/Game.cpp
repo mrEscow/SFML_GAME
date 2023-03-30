@@ -64,12 +64,12 @@ public:
     {
         std::string path;
         const fs::path workdir = fs::current_path();
-        const fs::path mapsPath = workdir / "Maps";
-        std::string extension = ".json";
+        const fs::path mapsPath = workdir / "Maps" ;
+        std::string name = "Map#1.json";
 
         std::filesystem::directory_iterator iterator(mapsPath);
         for (; iterator != std::filesystem::end(iterator); iterator++)
-            if (iterator->path().extension() == extension)
+            if (iterator->path().filename() == name)
                 path = iterator->path().string();
 
         std::ifstream ifs{path};
@@ -81,6 +81,8 @@ public:
         json j;
         ifs >> j;
         ifs.close();
+
+        //std::cout << j << std::endl;
 
         if (j.find("height") != j.end())
         {
@@ -111,7 +113,7 @@ public:
                         if(layer.is_array()){
                             for (auto const& object : layer)
                             {
-                                std::cout << object << std::endl;
+                                //std::cout << object << std::endl;
                                 TileData tile;
                                 tile.gid = object["gid"];
                                 tile.gid--;
