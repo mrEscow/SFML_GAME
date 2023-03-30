@@ -5,8 +5,10 @@
 
 #include <SFML/Graphics.hpp>
 
-Player::Player()
+Player::Player(std::vector<std::string> tileMap)
 {
+    this->tileMap = tileMap;
+
     Stage = STAGE::REST;
 
     setImageDate("PlayerRest");
@@ -14,12 +16,21 @@ Player::Player()
 
     sprite.setPosition(250, 250);
 
+
+
     onGround = true;
 }
 
 void Player::Action()
 {
-    if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || (sf::Keyboard::isKeyPressed(sf::Keyboard::D)))) {
+    if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || (sf::Keyboard::isKeyPressed(sf::Keyboard::W))) && (onGround)) {
+        Stage = STAGE::JUMP;
+        setImageDate("PlayerRun");
+        dir = 0;
+        dy = -0.18;
+        onGround = false;
+    }
+    else if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || (sf::Keyboard::isKeyPressed(sf::Keyboard::D)))) {
         Stage = STAGE::RUNonRIght;
         setImageDate("PlayerRun");
         dir = 1;
@@ -30,13 +41,6 @@ void Player::Action()
         setImageDate("PlayerRun");
         dir = -1;
 
-    }
-    else if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || (sf::Keyboard::isKeyPressed(sf::Keyboard::W))) && (onGround)) {
-        Stage = STAGE::JUMP;
-        setImageDate("PlayerRun");
-        dir = 0;
-        dy = -0.18;
-        onGround = false;
     }
     else{
         Stage = STAGE::REST;
@@ -80,14 +84,21 @@ void Player::Update(const float& time)
     default:
         break;
 
-    }
+    }    
+
+    rect.left = sprite.getPosition().x;
+    rect.top = sprite.getPosition().y;
 
     checkCollicionWithMap();
 
     if(onGround) dy = 0;
     else dy = dy + 0.00015 * time;
 
+
+
+
     sprite.move(dir * dx * speedMove, dy * speedMove);
+
 }
 
 void Player::Draw()
@@ -105,12 +116,24 @@ void Player::setImageDate(std::string imageName)
     }
 
     sprite.setTexture(image->textura);
+    //sprite.setOrigin(image->X/2,image->Y/2);
     sprite.setTextureRect(sf::IntRect(0, 0, image->X, image->Y));
+
+    rect = sf::FloatRect(0,0, image->X, image->Y);
 }
 
 void Player::checkCollicionWithMap()
 {
+    for (int i = rect.top/64; i < (rect.top + rect.height)/64; ++i) {
+        for (int j = rect.left/64; j<(rect.left + rect.width)/64; j++){
+            if(tileMap[i][j] =='p'){
+                if (dy > 0)
+                    onGround=true;
 
-
+            }
+            else
+               onGround = false;
+        }
+    }
 }
 

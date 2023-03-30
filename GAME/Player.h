@@ -24,8 +24,10 @@ class Player : public AGameObject
 
     float speedAnimation = 0.05f;
 
+    sf::FloatRect rect;
+
 public:
-    Player();
+    Player(std::vector<std::string> tileMap);
 
     enum class STAGE{
         REST,
@@ -41,6 +43,9 @@ public:
     virtual void Draw() override;
 
 private:
+
+    std::vector<std::string> tileMap;
+
     void setImageDate(std::string imageName);
     void checkCollicionWithMap();
 
