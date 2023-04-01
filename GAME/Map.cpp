@@ -58,12 +58,26 @@ void Map::load(std::string mapName)
                     if(layer.is_array()){
                         for (auto const& object : layer)
                         {
-                            //std::cout << object << std::endl;
-                            TileData tile;
+
+                            MapObject tile;
+
+                            tile.id = object["id"];
+
                             tile.gid = object["gid"];
                             tile.gid--;
-                            tile.x = object["x"];
-                            tile.y = object["y"];
+
+                            tile.name = object["name"];
+                            tile.type = object["type"];
+
+                            tile.rotation = object ["rotation"];
+
+                            tile.visible = object ["visible"];
+
+
+                            tile.rect.left = object["x"];
+                            tile.rect.top = object["y"];
+                            tile.rect.width = object["width"];
+                            tile.rect.height = object["height"];
 
                             tilesFromMap.push_back(tile);
 
@@ -73,31 +87,4 @@ void Map::load(std::string mapName)
             }
         }
     }
-    createTileMap();
-}
-
-void Map::createTileMap()
-{
-    tileMap.clear();
-
-    for (int y = 0; y < height; ++y) {
-        std::string str;
-        bool isColision = false;
-        for (int x = 0; x < width; ++x) {
-            for (size_t idx = 0; idx < tilesFromMap.size(); ++idx) {
-                if( y * 64 == tilesFromMap[idx].y && x * 64 == tilesFromMap[idx].x){
-                    str += 'p';
-                    isColision = true;
-                    break;
-                }
-                else isColision = false;
-            }
-
-            if(!isColision){
-                str += ' ';
-            }
-        }
-        tileMap.push_back(str);
-    }
-
 }

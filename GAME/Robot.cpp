@@ -3,15 +3,10 @@
 #include "Define.h"
 #include "Window.h"
 
-Robot::Robot()
+Robot::Robot(): AGameObject("RobotRides",1000, 480)
 {
-    image = RES->getImage("RobotRides");
-
-    if(!image)
-        return;
-
-    sprite.setTexture(image->textura);
-    sprite.setTextureRect(sf::IntRect(0, 0, image->X, image->Y));
+    sprite.setTexture(imageData->textura);
+    sprite.setTextureRect(sf::IntRect(0, 0, imageData->W, imageData->H));
     sprite.setPosition(1000, 480);
 }
 
@@ -21,10 +16,10 @@ void Robot::Update(const float &time)
 
     currentFrame += speedAnimation * time;
 
-    if (currentFrame > image->frameCount)
-        currentFrame -=  image->frameCount;
+    if (currentFrame > imageData->frameCount)
+        currentFrame -=  imageData->frameCount;
 
-    sprite.setTextureRect(sf::IntRect(137 * int(currentFrame), 0,  image->X, image->Y));
+    sprite.setTextureRect(sf::IntRect(imageData->W * int(currentFrame), 0,  imageData->W, imageData->H));
 
     runTimer -= speedAnimation * time;
     if(runTimer < 0) runTimer = 100;
@@ -33,7 +28,4 @@ void Robot::Update(const float &time)
     sprite.move(dir * 2, 0);//происходит само движение персонажа влево
 }
 
-void Robot::Draw()
-{
-    WND->draw(sprite);
-}
+

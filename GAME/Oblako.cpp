@@ -4,15 +4,9 @@
 #include "Window.h"
 
 
-Oblako::Oblako()
+Oblako::Oblako() : AGameObject("Oblako", 1500, 100)
 {
-    image = RES->getImage("Oblako");
-
-    if(!image)
-        return;
-
-    sprite.setTexture(image->textura);
-
+    sprite.setTexture(imageData->textura);
     sprite.setPosition(1500, 100);
 }
 
@@ -25,10 +19,5 @@ void Oblako::Update(const float &time)
     if(runTimer < 0) runTimer = 250;
     runTimer > 125 ? dir = -1 : dir = 1;
 
-    sprite.move(dir * 2, 0);//происходит само движение персонажа влево
-}
-
-void Oblako::Draw()
-{
-    WND->draw(sprite);
+    sprite.move(dir * 2, 0);
 }

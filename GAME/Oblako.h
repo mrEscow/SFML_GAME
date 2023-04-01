@@ -7,10 +7,6 @@
 
 class Oblako : public AGameObject
 {
-    Image* image;
-
-    sf::Sprite sprite;
-
     float currentFrame = 0;
 
     float runTimer = 250;
@@ -24,7 +20,6 @@ public:
 public:
     //virtual void Action() override;
     virtual void Update(const float& time) override;
-    virtual void Draw() override;
 };
 
 

@@ -11,12 +11,12 @@
 
 namespace fs = std::filesystem;
 
-struct Image{
+struct ImageData{
     std::string name;
     sf::Texture textura;
     uint32_t frameCount;
-    float X;
-    float Y;
+    float W;
+    float H;
 };
 
 
@@ -29,7 +29,7 @@ public:
 
     static ResourcesManager* Get();
 
-    Image* getImage(std::string name);
+    ImageData* getImage(std::string name);
 
 protected:
     ResourcesManager();
@@ -37,7 +37,7 @@ protected:
 private:
     static ResourcesManager* resourcesManager;
 
-    std::vector<Image*> images;
+    std::vector<ImageData*> images;
 
     void loadTextures();
     std::vector<fs::path> serchImagesPaths();

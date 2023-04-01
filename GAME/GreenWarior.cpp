@@ -3,16 +3,12 @@
 #include "Define.h"
 #include "Window.h"
 
-GreenWarior::GreenWarior()
+GreenWarior::GreenWarior(): AGameObject("GreenWarriorAttack", 370, 170)
 {
-    image = RES->getImage("GreenWarriorAttack");
+    sprite.setTexture(imageData->textura);
+    sprite.setTextureRect(sf::IntRect(0, 0, imageData->W, imageData->H));
 
-    if(!image)
-        return;
-
-    sprite.setTexture(image->textura);
-    sprite.setTextureRect(sf::IntRect(0, 0, image->X, image->Y));
-    sprite.setPosition(370, 170);
+    sprite.setPosition(1000, 480);
 }
 
 void GreenWarior::Update(const float &time)
@@ -21,13 +17,8 @@ void GreenWarior::Update(const float &time)
 
     currentFrame += speedAnimation * time;
 
-    if (currentFrame > image->frameCount)
-        currentFrame -= image->frameCount;
+    if (currentFrame > imageData->frameCount)
+        currentFrame -= imageData->frameCount;
 
-    sprite.setTextureRect(sf::IntRect(image->X * int(currentFrame), 0, image->X, image->Y));
-}
-
-void GreenWarior::Draw()
-{
-    WND->draw(sprite);
+    sprite.setTextureRect(sf::IntRect(imageData->W * int(currentFrame), 0, imageData->W, imageData->H));
 }

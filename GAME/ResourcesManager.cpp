@@ -31,7 +31,7 @@ ResourcesManager* ResourcesManager::Get()
 }
 
 
-Image* ResourcesManager::getImage(std::string name)
+ImageData* ResourcesManager::getImage(std::string name)
 {
         for(auto tmp : images)
             if(tmp->name == name)
@@ -108,15 +108,15 @@ void ResourcesManager::addTextura(std::filesystem::path path)
 {
     std::string name;
     std::string frameCount;
-    std::string X;
-    std::string Y;
+    std::string W;
+    std::string H;
 
     std::string fullname = path.filename().string();
 
     bool isName = true;
     bool isFrameCount = true;
-    bool isX = true;
-    bool isY = true;
+    bool isW = true;
+    bool isH = true;
 
     for (size_t i = 0; i < fullname.size(); ++i) {
         if(isName){
@@ -141,24 +141,24 @@ void ResourcesManager::addTextura(std::filesystem::path path)
             }
         }
 
-        if(isX){
+        if(isW){
             if(fullname[i] == '_'){
-                isX = false;
+                isW = false;
                 continue;
             }
             else{
-                X += fullname[i];
+                W += fullname[i];
                 continue;
             }
         }
 
-        if(isY){
+        if(isH){
             if(fullname[i] == '.'){
-                isY = false;
+                isH = false;
                 continue;
             }
             else{
-                Y += fullname[i];
+                H += fullname[i];
                 continue;
             }
         }
@@ -170,11 +170,11 @@ void ResourcesManager::addTextura(std::filesystem::path path)
 //    std::cout << "Y: " << Y << std::endl;
 
 
-    Image* image = new Image();
+    ImageData* image = new ImageData();
     image->name = name;
     image->frameCount = std::stoul(frameCount);
-    image->X = std::stof(X);
-    image->Y = std::stof(Y);
+    image->W = std::stof(W);
+    image->H = std::stof(H);
 
     image->textura.loadFromFile(path.string());
 

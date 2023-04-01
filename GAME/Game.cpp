@@ -33,10 +33,10 @@ Game::Game()
 
     Map map("Map#1.json");
 
-    std::vector <TileData> tilesData = map.getTilesData();
+    std::vector <MapObject> tilesData = map.getTilesData();
 
     for (size_t i = 0; i < tilesData.size(); ++i) {
-        sf::Vector2f pos = {static_cast<float>( tilesData[i].x) , static_cast<float>(tilesData[i].y)};
+        sf::Vector2f pos = {static_cast<float>( tilesData[i].rect.left) , static_cast<float>(tilesData[i].rect.top)};
         gameObjects.push_back(std::make_unique<Tile>(pos, tilesData[i].gid));
     }
 
@@ -45,7 +45,7 @@ Game::Game()
 
     gameObjects.push_back(std::make_unique<Robot>());
 
-    gameObjects.push_back(std::make_unique<Player>(map.getTileMap()));
+    gameObjects.push_back(std::make_unique<Player>(map.getTilesData()));
 }
 
 void Game::play(){
@@ -62,9 +62,11 @@ void Game::play(){
                 WND->close();
             }
 
-            for(auto& object:gameObjects)
-                object->Action();
+
         }
+
+        for(auto& object:gameObjects)
+            object->Action();
 
         for(auto& object:gameObjects)
             object->Update(time);

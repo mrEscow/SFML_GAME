@@ -2,52 +2,46 @@
 #define PLAYER_H
 
 #include "GameObject.h"
-#include "SFML/Graphics/Sprite.hpp"
-#include "ResourcesManager.h"
+
+
 
 class Player : public AGameObject
 {
-    Image* image;//создаем объект Texture (текстура)
+    enum class STAGE{
 
-    sf::Sprite sprite; //создаем объект Sprite(спрайт)
+        STAY,
+        STAY_JUMP,
+        STAY_DROP,
+        STAY_SITTING,
 
-    float currentFrame = 0;//хранит текущий кадр
+        RUN_RIGHT,
+        RUN_LEFT,
+        RUN_JUMP,
+        RUN_DROP,
+        RUN_SITTING
 
-    int dir = 1; //направление (direction) движения игрока
+    }Stage;
 
-    float dx = 0.1;
-    float dy = 0;
-
-    bool onGround;
-
-    float speedMove = 50;
+    float speedMove = 10;
 
     float speedAnimation = 0.05f;
 
-    sf::FloatRect rect;
+
+    bool isStayJump{false};
+    bool isStaySitting{false};
 
 public:
-    Player(std::vector<std::string> tileMap);
+    Player(std::vector<MapObject> mapObject);
 
-    enum class STAGE{
-        REST,
-        RUNonRIght,
-        RUNonLEFT,
-        JUMP
-    }Stage;
+
 
     // AGameObject interface
 public:
     virtual void Action() override;
     virtual void Update(const float& time) override;
-    virtual void Draw() override;
 
-private:
-
-    std::vector<std::string> tileMap;
-
-    void setImageDate(std::string imageName);
-    void checkCollicionWithMap();
+private: 
+    void checkCollicionWithMap(float Dx, float Dy);
 
 };
 

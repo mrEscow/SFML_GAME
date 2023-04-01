@@ -5,49 +5,100 @@
 
 #include <SFML/Graphics.hpp>
 
-Player::Player(std::vector<std::string> tileMap)
+Player::Player(std::vector <MapObject> mapObject) : AGameObject("PlayerStayDrop", 250, 250)
 {
-    this->tileMap = tileMap;
+    obj = mapObject;
 
-    Stage = STAGE::REST;
-
-    setImageDate("PlayerRest");
+    Stage = STAGE::STAY_DROP;
 
 
     sprite.setPosition(250, 250);
 
+    //sprite.scale(0.3,0.3);
+
+    //sprite.scale(1,1);
 
 
-    onGround = true;
+    onGround = false;
 }
 
 void Player::Action()
 {
-    if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || (sf::Keyboard::isKeyPressed(sf::Keyboard::W))) && (onGround)) {
-        Stage = STAGE::JUMP;
-        setImageDate("PlayerRun");
-        dir = 0;
-        dy = -0.18;
-        onGround = false;
-    }
-    else if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || (sf::Keyboard::isKeyPressed(sf::Keyboard::D)))) {
-        Stage = STAGE::RUNonRIght;
-        setImageDate("PlayerRun");
-        dir = 1;
+    std:: cout << "Dy: " << dy << std::endl;
+
+    onGround ?
+        std:: cout << "onGround: " << "TRUE" << std::endl
+             :
+        std:: cout << "onGround: " << "FALSE" << std::endl;
+
+    if(Stage == STAGE::STAY){
+
+        if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || (sf::Keyboard::isKeyPressed(sf::Keyboard::W))) && (onGround)) {
+            Stage = STAGE::STAY_JUMP;
+            setImageDate("PlayerStayJump");
+            dy = -0.9;
+            onGround = false;
+            std::cout << "STAGE: " << "STAY_JUMP" << std::endl;
+            return;
+        }
+
+        if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || (sf::Keyboard::isKeyPressed(sf::Keyboard::S))) && (onGround)) {
+            Stage = STAGE::STAY_SITTING;
+            setImageDate("PlayerStaySitting");
+            std::cout << "STAGE: " << "STAY_SITTING" << std::endl;
+            isStaySitting = true;
+            return;
+        }
 
     }
-    else if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || (sf::Keyboard::isKeyPressed(sf::Keyboard::A)))) {
-        Stage = STAGE::RUNonLEFT;
+
+    if(Stage == STAGE::STAY_JUMP){
+        if(dy >= 0){
+            Stage = STAGE::STAY_DROP;
+            setImageDate("PlayerStayDrop");
+            std::cout << "STAGE: " << "STAY_DROP" << std::endl;
+            return;
+        }
+    }
+
+    if(Stage == STAGE::STAY_SITTING){
+        if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || (sf::Keyboard::isKeyPressed(sf::Keyboard::S))) && (onGround)) {
+            //Stage = STAGE::STAY_SITTING;
+            //setImageDate("PlayerStaySitting");
+            std::cout << "STAGE: " << "STAY_SITTING" << std::endl;
+            isStaySitting = true;
+            return;
+        }
+        else{
+            Stage = STAGE::STAY;
+            setImageDate("PlayerStay");
+            std::cout << "STAGE: " << "STAY" << std::endl;
+        }
+    }
+
+
+    if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || (sf::Keyboard::isKeyPressed(sf::Keyboard::D)))) {
+        Stage = STAGE::RUN_RIGHT;
         setImageDate("PlayerRun");
-        dir = -1;
-
+        std::cout << "STAGE: " << "RUN_RIGHT" << std::endl;
+        return;
     }
-    else{
-        Stage = STAGE::REST;
-        setImageDate("PlayerRest");
-        dir = 0;
 
+
+    if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || (sf::Keyboard::isKeyPressed(sf::Keyboard::A)))) {
+        Stage = STAGE::RUN_LEFT;
+        setImageDate("PlayerRun");
+        std::cout << "STAGE: " << "RUN_LEFT" << std::endl;
+        return;
     }
+
+    if(onGround){
+        Stage = STAGE::STAY;
+        setImageDate("PlayerStay");
+        std::cout << "STAGE: " << "STAY" << std::endl;
+        return;
+    }
+
 }
 
 void Player::Update(const float& time)
@@ -55,85 +106,132 @@ void Player::Update(const float& time)
 
     currentFrame += speedAnimation * time ;
 
+    //std::cout << "Current Frame: " << currentFrame << std::endl;
+
     switch (Stage) {
 
-    case STAGE::REST:
-        dir = 0;
-        if (currentFrame > image->frameCount) currentFrame -= image->frameCount;
-        sprite.setTextureRect(sf::IntRect(image->X * int(currentFrame) , 0,  image->X, image->Y));
+    case STAGE::STAY:
+        speed = 0;
+        dx = 0;
+        if (currentFrame > imageData->frameCount) currentFrame -= imageData->frameCount;
+        std::cout << "STAGE: " << "STAY" << std::endl;
+        std::cout << "Current Frame: " << currentFrame << std::endl;
+        sprite.setTextureRect(sf::IntRect(imageData->W * int(currentFrame) , 0,  imageData->W, imageData->H));
         break;
 
-    case STAGE::RUNonRIght:
-        dir = 1;
-        if (currentFrame > image->frameCount) currentFrame -= image->frameCount;
-        sprite.setTextureRect(sf::IntRect(image->X * int(currentFrame) , 0,  image->X, image->Y));
+    case STAGE::STAY_JUMP:
+        if (currentFrame > imageData->frameCount) currentFrame = imageData->frameCount - 1;
+        std::cout << "STAGE: " << "STAY_JUMP" << std::endl;
+        std::cout << "Current Frame: " << currentFrame << std::endl;
+        sprite.setTextureRect(sf::IntRect(imageData->W * int(currentFrame) , 0,  imageData->W, imageData->H));
         break;
 
-    case STAGE::RUNonLEFT:
-        dir = -1;
-        if (currentFrame > image->frameCount - 1 ) currentFrame -= image->frameCount - 1;
-        sprite.setTextureRect(sf::IntRect(image->X * (int(currentFrame) + 1) , 0,  -image->X, image->Y));
+    case STAGE::STAY_DROP:
+        if (currentFrame > imageData->frameCount) currentFrame = imageData->frameCount - 1;
+        std::cout << "STAGE: " << "STAY_DROP" << std::endl;
+        std::cout << "Current Frame: " << currentFrame << std::endl;
+        sprite.setTextureRect(sf::IntRect(imageData->W * int(currentFrame) , 0,  imageData->W, imageData->H));
         break;
 
-    case STAGE::JUMP:
-        dir = 0;
-        if (currentFrame > image->frameCount) currentFrame -= image->frameCount;
-        sprite.setTextureRect(sf::IntRect(image->X * int(currentFrame) , 0,  image->X, image->Y));
+    case STAGE::STAY_SITTING:
+        if (currentFrame > imageData->frameCount) currentFrame = imageData->frameCount - 1;
+        std::cout << "STAGE: " << "STAY_SITTING" << std::endl;
+        std::cout << "Current Frame: " << currentFrame << std::endl;
+        sprite.setTextureRect(sf::IntRect(imageData->W * int(currentFrame) , 0,  imageData->W, imageData->H));
+        break;
+
+    case STAGE::RUN_RIGHT:
+        dx = speed;
+        if (currentFrame > imageData->frameCount) currentFrame -= imageData->frameCount;
+        std::cout << "STAGE: " << "RUN_RIGHT" << std::endl;
+        std::cout << "Current Frame: " << currentFrame << std::endl;
+        sprite.setTextureRect(sf::IntRect(imageData->W * int(currentFrame) , 0,  imageData->W, imageData->H));
+        break;
+
+    case STAGE::RUN_LEFT:
+        dx = -speed;
+        if (currentFrame > imageData->frameCount - 1 ) currentFrame -= imageData->frameCount - 1;
+        std::cout << "STAGE: " << "RUN_LEFT" << std::endl;
+        std::cout << "Current Frame: " << currentFrame << std::endl;
+        sprite.setTextureRect(sf::IntRect(imageData->W * (int(currentFrame) + 1) , 0,  -imageData->W, imageData->H));
+        break;
+
+    case STAGE::RUN_JUMP:
+        dx = -speed;
+        if (currentFrame > imageData->frameCount - 1 ) currentFrame -= imageData->frameCount - 1;
+        std::cout << "STAGE: " << "RUN_JUMP" << std::endl;
+        std::cout << "Current Frame: " << currentFrame << std::endl;
+        sprite.setTextureRect(sf::IntRect(imageData->W * (int(currentFrame) + 1) , 0,  -imageData->W, imageData->H));
+        break;
+
+    case STAGE::RUN_DROP:
+        dx = -speed;
+        if (currentFrame > imageData->frameCount - 1 ) currentFrame = imageData->frameCount - 1;
+        std::cout << "STAGE: " << "RUN_DROP" << std::endl;
+        std::cout << "Current Frame: " << currentFrame << std::endl;
+        sprite.setTextureRect(sf::IntRect(imageData->W * (int(currentFrame) + 1) , 0,  -imageData->W, imageData->H));
+        break;
+
+    case STAGE::RUN_SITTING:
+        dx = -speed;
+        if (currentFrame > imageData->frameCount - 1 ) currentFrame -= imageData->frameCount - 1;
+        std::cout << "STAGE: " << "RUN_SITTING" << std::endl;
+        std::cout << "Current Frame: " << currentFrame << std::endl;
+        sprite.setTextureRect(sf::IntRect(imageData->W * (int(currentFrame) + 1) , 0,  -imageData->W, imageData->H));
         break;
 
     default:
         break;
 
-    }    
-
-    rect.left = sprite.getPosition().x;
-    rect.top = sprite.getPosition().y;
-
-    checkCollicionWithMap();
-
-    if(onGround) dy = 0;
-    else dy = dy + 0.00015 * time;
-
-
-
-
-    sprite.move(dir * dx * speedMove, dy * speedMove);
-
-}
-
-void Player::Draw()
-{
-    WND->draw(sprite);
-}
-
-void Player::setImageDate(std::string imageName)
-{
-    image = RES->getImage(imageName);
-
-    if(!image){
-        std::cout << "IMGE ERROR! " << " PLAYER" << "NAME: " << imageName;
-        return;
     }
 
-    sprite.setTexture(image->textura);
-    //sprite.setOrigin(image->X/2,image->Y/2);
-    sprite.setTextureRect(sf::IntRect(0, 0, image->X, image->Y));
+    x += dx*time;
+    checkCollicionWithMap(dx, 0);
 
-    rect = sf::FloatRect(0,0, image->X, image->Y);
+    y += dy*time;
+    checkCollicionWithMap(0, dy);
+
+    //sprite.setPosition(x + w / 2, y + h / 2);
+
+    sprite.setPosition(x , y + h / 2);
+
+    //std::cout << "POSITION: " << x << " " << y << std::endl;
+
+    if (health <= 0){ life = false; }
+
+    if (!isMove){ speed = 0; }
+
+    //setPlayerCoordinateForView(x, y);
+
+    //if (life) { setPlayerCoordinateForView(x, y); }
+
+    dy = dy + 0.0015*time;
+
 }
 
-void Player::checkCollicionWithMap()
+void Player::checkCollicionWithMap(float Dx, float Dy)
 {
-    for (int i = rect.top/64; i < (rect.top + rect.height)/64; ++i) {
-        for (int j = rect.left/64; j<(rect.left + rect.width)/64; j++){
-            if(tileMap[i][j] =='p'){
-                if (dy > 0)
-                    onGround=true;
+    for (int i = 0; i<obj.size(); i++)//проходимся по объектам
+        if (getRect().intersects(obj[i].rect))//проверяем пересечение игрока с объектом
+        {
+            if (obj[i].type == "solid"){//если встретили препятствие (объект с именем solid)
 
+                //std::cout << "Dy:" << Dy << std::endl;
+                //std::cout << "Dx:" << Dx << std::endl;
+
+                if (Dy>0)	{
+
+
+                    //std::cout << "X:" << sprite.getPosition().x << std::endl;
+                    //std::cout << "Y:" << sprite.getPosition().y << std::endl;
+
+                    y = obj[i].rect.top - h;
+                    dy = 0; onGround = true;
+                }
+                if (Dy<0)	{ y = obj[i].rect.top + obj[i].rect.height;   dy = 0; }
+                //if (Dx>0)	{ x = obj[i].rect.left - w;  dx = -0.1; sprite.scale(-1, 1); }
+                //if (Dx<0)	{ x = obj[i].rect.left + obj[i].rect.width; dx = 0.1; sprite.scale(-1, 1); }
             }
-            else
-               onGround = false;
         }
-    }
 }
 
