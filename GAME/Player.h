@@ -22,7 +22,7 @@ class Player : public AGameObject
 
     }Stage;
 
-    float speedMove = 10;
+    float speedMove = 7;
 
     float speedAnimation = 0.05f;
 

@@ -53,11 +53,11 @@ public:
 
 
         moveTimer = 0;
-        speed = 0;
+        speed = 0.01;
 
         health = 100;
 
-        dx = 0; dy = 0;
+        //dx = 0; dy = 0;
 
         life = true;
         onGround = false;

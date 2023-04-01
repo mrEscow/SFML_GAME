@@ -11,26 +11,15 @@ Player::Player(std::vector <MapObject> mapObject) : AGameObject("PlayerStayDrop"
 
     Stage = STAGE::STAY_DROP;
 
-
     sprite.setPosition(250, 250);
 
-    //sprite.scale(0.3,0.3);
+    //onGround = false;
 
-    //sprite.scale(1,1);
-
-
-    onGround = false;
+    speed = 0.4;
 }
 
 void Player::Action()
 {
-    std:: cout << "Dy: " << dy << std::endl;
-
-    onGround ?
-        std:: cout << "onGround: " << "TRUE" << std::endl
-             :
-        std:: cout << "onGround: " << "FALSE" << std::endl;
-
     if(Stage == STAGE::STAY){
 
         if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || (sf::Keyboard::isKeyPressed(sf::Keyboard::W))) && (onGround)) {
@@ -63,8 +52,6 @@ void Player::Action()
 
     if(Stage == STAGE::STAY_SITTING){
         if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || (sf::Keyboard::isKeyPressed(sf::Keyboard::S))) && (onGround)) {
-            //Stage = STAGE::STAY_SITTING;
-            //setImageDate("PlayerStaySitting");
             std::cout << "STAGE: " << "STAY_SITTING" << std::endl;
             isStaySitting = true;
             return;
@@ -106,12 +93,9 @@ void Player::Update(const float& time)
 
     currentFrame += speedAnimation * time ;
 
-    //std::cout << "Current Frame: " << currentFrame << std::endl;
-
     switch (Stage) {
 
     case STAGE::STAY:
-        speed = 0;
         dx = 0;
         if (currentFrame > imageData->frameCount) currentFrame -= imageData->frameCount;
         std::cout << "STAGE: " << "STAY" << std::endl;
@@ -157,33 +141,39 @@ void Player::Update(const float& time)
         break;
 
     case STAGE::RUN_JUMP:
-        dx = -speed;
         if (currentFrame > imageData->frameCount - 1 ) currentFrame -= imageData->frameCount - 1;
         std::cout << "STAGE: " << "RUN_JUMP" << std::endl;
         std::cout << "Current Frame: " << currentFrame << std::endl;
-        sprite.setTextureRect(sf::IntRect(imageData->W * (int(currentFrame) + 1) , 0,  -imageData->W, imageData->H));
+        sprite.setTextureRect(sf::IntRect(imageData->W * (int(currentFrame) + 1) , 0,  imageData->W, imageData->H));
         break;
 
     case STAGE::RUN_DROP:
-        dx = -speed;
         if (currentFrame > imageData->frameCount - 1 ) currentFrame = imageData->frameCount - 1;
         std::cout << "STAGE: " << "RUN_DROP" << std::endl;
         std::cout << "Current Frame: " << currentFrame << std::endl;
-        sprite.setTextureRect(sf::IntRect(imageData->W * (int(currentFrame) + 1) , 0,  -imageData->W, imageData->H));
+        sprite.setTextureRect(sf::IntRect(imageData->W * (int(currentFrame) + 1) , 0,  imageData->W, imageData->H));
         break;
 
     case STAGE::RUN_SITTING:
-        dx = -speed;
         if (currentFrame > imageData->frameCount - 1 ) currentFrame -= imageData->frameCount - 1;
         std::cout << "STAGE: " << "RUN_SITTING" << std::endl;
         std::cout << "Current Frame: " << currentFrame << std::endl;
-        sprite.setTextureRect(sf::IntRect(imageData->W * (int(currentFrame) + 1) , 0,  -imageData->W, imageData->H));
+        sprite.setTextureRect(sf::IntRect(imageData->W * (int(currentFrame) + 1) , 0,  imageData->W, imageData->H));
         break;
 
     default:
         break;
 
     }
+
+    //sprite.setTextureRect(sf::IntRect(imageData->W * (int(currentFrame) + 1) , 0,  imageData->W, imageData->H));
+
+    std::cout << "SPEED: " << speed << std::endl;
+
+    std::cout << "X :" << x << std::endl;
+    std::cout << "Dx:" << dx << std::endl;
+    std::cout << "Y :" << y << std::endl;
+    std::cout << "Dy:" << dy << std::endl;
 
     x += dx*time;
     checkCollicionWithMap(dx, 0);
@@ -193,19 +183,27 @@ void Player::Update(const float& time)
 
     //sprite.setPosition(x + w / 2, y + h / 2);
 
+    std::cout << "X :" << x << std::endl;
+    std::cout << "Dx:" << dx << std::endl;
+    std::cout << "Y :" << y << std::endl;
+    std::cout << "Dy:" << dy << std::endl;
+
     sprite.setPosition(x , y + h / 2);
 
     //std::cout << "POSITION: " << x << " " << y << std::endl;
 
     if (health <= 0){ life = false; }
 
-    if (!isMove){ speed = 0; }
+    //if (!isMove){ speed = 0; }
 
     //setPlayerCoordinateForView(x, y);
 
     //if (life) { setPlayerCoordinateForView(x, y); }
 
     dy = dy + 0.0015*time;
+
+    //if(dx>0) sprite.scale(-1, 1);
+    //if(dx<0) sprite.scale(-1, 1);
 
 }
 
@@ -216,21 +214,26 @@ void Player::checkCollicionWithMap(float Dx, float Dy)
         {
             if (obj[i].type == "solid"){//если встретили препятствие (объект с именем solid)
 
-                //std::cout << "Dy:" << Dy << std::endl;
-                //std::cout << "Dx:" << Dx << std::endl;
-
                 if (Dy>0)	{
-
-
-                    //std::cout << "X:" << sprite.getPosition().x << std::endl;
-                    //std::cout << "Y:" << sprite.getPosition().y << std::endl;
-
                     y = obj[i].rect.top - h;
-                    dy = 0; onGround = true;
+                    dy = 0;
+                    onGround = true;
                 }
-                if (Dy<0)	{ y = obj[i].rect.top + obj[i].rect.height;   dy = 0; }
-                //if (Dx>0)	{ x = obj[i].rect.left - w;  dx = -0.1; sprite.scale(-1, 1); }
-                //if (Dx<0)	{ x = obj[i].rect.left + obj[i].rect.width; dx = 0.1; sprite.scale(-1, 1); }
+                if (Dy<0)	{
+                    y = obj[i].rect.top + obj[i].rect.height;
+                    dy = 0;
+                }
+
+                if (Dx>0)	{
+                    //x = obj[i].rect.left - w;
+                    //dx = -0.1;
+                    //sprite.scale(-1, 1);
+                }
+                if (Dx<0)	{
+                    //x = obj[i].rect.left + obj[i].rect.width;
+                    //dx = 0.1;
+                    //sprite.scale(-1, 1);
+                }
             }
         }
 }
