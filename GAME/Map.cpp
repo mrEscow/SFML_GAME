@@ -51,8 +51,11 @@ void Map::load(std::string mapName)
     {
         if (layers.find("name") != layers.end())
         {
+
+            //std::cout << "NAME_LAYER: " << layers["name"] << std:: endl;
+
+
             if(layers["name"] == "Ground" ){
-                std::cout << "TRUE" << std::endl;
                 for (auto const& layer : layers)
                 {
                     if(layer.is_array()){
@@ -79,8 +82,63 @@ void Map::load(std::string mapName)
                             tile.rect.width = object["width"];
                             tile.rect.height = object["height"];
 
-                            tilesFromMap.push_back(tile);
+                            allObjectsFromMap.push_back(tile);
 
+                        }
+                    }
+
+                }
+            }
+
+            if(layers["name"] == "PlayerAction" ){
+                for (auto const& layer : layers)
+                {
+                    if(layer.is_array()){
+                        for (auto const& object : layer)
+                        {
+                            MapObject tile;
+
+                            tile.id = object["id"];
+
+//                            tile.gid = object["gid"];
+//                            tile.gid--;
+
+                            tile.name = object["name"];
+                            tile.type = object["type"];
+
+                            tile.rotation = object ["rotation"];
+
+                            tile.visible = object ["visible"];
+
+
+                            tile.rect.left = object["x"];
+                            tile.rect.top = object["y"];
+                            tile.rect.width = object["width"];
+                            tile.rect.height = object["height"];
+
+
+
+//                            std::cout << "PlayerActions:" << std::endl;
+
+//                            std::cout << tile.id << std::endl;
+
+////                            std::cout << tile.gid << std::endl;
+////                            std::cout << tile.gid << std::endl;
+
+//                            std::cout << tile.name << std::endl;
+//                            std::cout << tile.type << std::endl;
+
+//                            std::cout << tile.rotation << std::endl;
+
+//                            std::cout << tile.visible << std::endl;
+
+//                            std::cout << tile.rect.left << std::endl;
+//                            std::cout << tile.rect.top << std::endl;
+//                            std::cout << tile.rect.width << std::endl;
+//                            std::cout << tile.rect.height << std::endl;
+
+
+                            allObjectsFromMap.push_back(tile);
                         }
                     }
                 }

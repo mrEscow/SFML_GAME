@@ -33,6 +33,8 @@ protected:
 
     float currentFrame = 0;//хранит текущий кадр
 
+    bool isStart = true;
+
 
 public:
     AGameObject(std::string imageName, float X = 0, float Y = 0){
@@ -44,7 +46,7 @@ public:
             return;
         }
 
-        std::cout << "ImageDateName: " << imageData->name << std::endl;
+        //std::cout << "ImageDateName: " << imageData->name << std::endl;
 
         x = X; y = Y;
 
@@ -57,7 +59,7 @@ public:
 
         health = 100;
 
-        //dx = 0; dy = 0;
+        dx = 0; dy = 0;
 
         life = true;
         onGround = false;
@@ -80,13 +82,13 @@ protected:
         return sf::FloatRect(x, y, w, h);//эта ф-ция нужна для проверки столкновений
     }
 
-    void setImageDate(std::string imageName, float scaleX = 1, float scaleY = 1)
+    void setImageDate(std::string imageName)
     {
-        if(imageData)
-            if(!imageData->name.empty())
-                if(imageData->name == imageName){
-                    return;
-                }
+//        if(imageData)
+//            if(!imageData->name.empty())
+//                if(imageData->name == imageName){
+//                    return;
+//                }
 
 
         imageData = RES->getImage(imageName);
@@ -96,16 +98,18 @@ protected:
             return;
         }
 
-        std::cout << "ImageDateName: " << imageData->name << std::endl;
+        //std::cout << "ImageDateName: " << imageData->name << std::endl;
 
         sprite.setTexture(imageData->textura);
+
         sprite.setOrigin(imageData->W/2 ,imageData->H/2);
+
         sprite.setTextureRect(sf::IntRect(0, 0, imageData->W, imageData->H));
 
-        sprite.setScale(scaleX, scaleY);
+        //sprite.setScale(scaleX, scaleY);
 
-        w = imageData->W / scaleX;
-        h = imageData->H / scaleY;
+        w = imageData->W;
+        h = imageData->H;
 
         currentFrame = 0;
     }

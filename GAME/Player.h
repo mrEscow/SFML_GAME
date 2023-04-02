@@ -30,6 +30,8 @@ class Player : public AGameObject
     bool isStayJump{false};
     bool isStaySitting{false};
 
+    std::vector <MapObject> playerActionsFromMap;
+
 public:
     Player(std::vector<MapObject> mapObject);
 

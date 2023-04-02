@@ -22,6 +22,9 @@ public:
     ~Game();
 
 private:
+    void loadLevel();
+
+private:
     entt::registry registry;
 
     sf::Clock deltaClock;

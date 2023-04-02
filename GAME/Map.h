@@ -37,14 +37,14 @@ class Map
     int width{0};
     int tileheight{0};
 
-    std::vector <MapObject> tilesFromMap;
+    std::vector <MapObject> allObjectsFromMap;
 
 public:
     Map(std::string mapName);
 
 public:
-    std::vector <MapObject> getTilesData(){
-        return tilesFromMap;
+    std::vector <MapObject> getAllObjectsDataFromMap(){
+        return allObjectsFromMap;
     }
 
     void load(std::string mapName);

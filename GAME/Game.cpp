@@ -26,18 +26,27 @@ Game::Game()
     if(ImGui::SFML::Init(*WND)){}
     WND->setTitle(windowTitle);
 
+    loadLevel();
 
+}
+
+void Game::loadLevel()
+{
     gameObjects.push_back(std::make_unique<BackGround>());
     gameObjects.push_back(std::make_unique<Oblako>());
 
 
     Map map("Map#1.json");
 
-    std::vector <MapObject> tilesData = map.getTilesData();
+    std::vector <MapObject> AllObjectsData = map.getAllObjectsDataFromMap();
 
-    for (size_t i = 0; i < tilesData.size(); ++i) {
-        sf::Vector2f pos = {static_cast<float>( tilesData[i].rect.left) , static_cast<float>(tilesData[i].rect.top)};
-        gameObjects.push_back(std::make_unique<Tile>(pos, tilesData[i].gid));
+
+    // Загрузка плиток
+    for (size_t i = 0; i < AllObjectsData.size(); ++i) {
+        if(AllObjectsData[i].type == "solid"){
+            sf::Vector2f pos = {static_cast<float>( AllObjectsData[i].rect.left) , static_cast<float>(AllObjectsData[i].rect.top)};
+            gameObjects.push_back(std::make_unique<Tile>(pos, AllObjectsData[i].gid));
+        }
     }
 
 
@@ -45,7 +54,10 @@ Game::Game()
 
     gameObjects.push_back(std::make_unique<Robot>());
 
-    gameObjects.push_back(std::make_unique<Player>(map.getTilesData()));
+
+
+
+    gameObjects.push_back(std::make_unique<Player>(AllObjectsData));
 }
 
 void Game::play(){

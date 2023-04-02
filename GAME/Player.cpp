@@ -1,21 +1,16 @@
 #include "Player.h"
-#include "Define.h"
-#include "Window.h"
-
 
 #include <SFML/Graphics.hpp>
 
-Player::Player(std::vector <MapObject> mapObject) : AGameObject("PlayerStayDrop", 250, 250)
+Player::Player(std::vector <MapObject> mapObject) : AGameObject("PlayerStayDrop")
 {
     obj = mapObject;
 
     Stage = STAGE::STAY_DROP;
 
-    sprite.setPosition(250, 250);
-
-    //onGround = false;
-
     speed = 0.4;
+
+    dx = 0; dy = 0;
 }
 
 void Player::Action()
@@ -27,14 +22,14 @@ void Player::Action()
             setImageDate("PlayerStayJump");
             dy = -0.9;
             onGround = false;
-            std::cout << "STAGE: " << "STAY_JUMP" << std::endl;
+            //std::cout << "STAGE: " << "STAY_JUMP" << std::endl;
             return;
         }
 
         if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || (sf::Keyboard::isKeyPressed(sf::Keyboard::S))) && (onGround)) {
             Stage = STAGE::STAY_SITTING;
             setImageDate("PlayerStaySitting");
-            std::cout << "STAGE: " << "STAY_SITTING" << std::endl;
+            //std::cout << "STAGE: " << "STAY_SITTING" << std::endl;
             isStaySitting = true;
             return;
         }
@@ -45,21 +40,21 @@ void Player::Action()
         if(dy >= 0){
             Stage = STAGE::STAY_DROP;
             setImageDate("PlayerStayDrop");
-            std::cout << "STAGE: " << "STAY_DROP" << std::endl;
+            //std::cout << "STAGE: " << "STAY_DROP" << std::endl;
             return;
         }
     }
 
     if(Stage == STAGE::STAY_SITTING){
         if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || (sf::Keyboard::isKeyPressed(sf::Keyboard::S))) && (onGround)) {
-            std::cout << "STAGE: " << "STAY_SITTING" << std::endl;
+            //std::cout << "STAGE: " << "STAY_SITTING" << std::endl;
             isStaySitting = true;
             return;
         }
         else{
             Stage = STAGE::STAY;
             setImageDate("PlayerStay");
-            std::cout << "STAGE: " << "STAY" << std::endl;
+            //std::cout << "STAGE: " << "STAY" << std::endl;
         }
     }
 
@@ -67,7 +62,7 @@ void Player::Action()
     if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || (sf::Keyboard::isKeyPressed(sf::Keyboard::D)))) {
         Stage = STAGE::RUN_RIGHT;
         setImageDate("PlayerRun");
-        std::cout << "STAGE: " << "RUN_RIGHT" << std::endl;
+        //std::cout << "STAGE: " << "RUN_RIGHT" << std::endl;
         return;
     }
 
@@ -75,14 +70,14 @@ void Player::Action()
     if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || (sf::Keyboard::isKeyPressed(sf::Keyboard::A)))) {
         Stage = STAGE::RUN_LEFT;
         setImageDate("PlayerRun");
-        std::cout << "STAGE: " << "RUN_LEFT" << std::endl;
+        //std::cout << "STAGE: " << "RUN_LEFT" << std::endl;
         return;
     }
 
     if(onGround){
         Stage = STAGE::STAY;
         setImageDate("PlayerStay");
-        std::cout << "STAGE: " << "STAY" << std::endl;
+        //std::cout << "STAGE: " << "STAY" << std::endl;
         return;
     }
 
@@ -90,6 +85,38 @@ void Player::Action()
 
 void Player::Update(const float& time)
 {
+//    std::cout << "Player" << std::endl;
+
+//    std::cout << "X :" << x << std::endl;
+//    std::cout << "Dx:" << dx << std::endl;
+//    std::cout << "Y :" << y << std::endl;
+//    std::cout << "Dy:" << dy << std::endl;
+
+//    std::cout << "Speed: " << speed << std::endl;
+
+    ///////////////////////////////////////////////////
+    if(isStart){
+
+        float posX;
+        float posY;
+
+        for (size_t var = 0; var < obj.size(); ++var) {
+            if(obj[var].name == "PlayerStartPos"){
+                posX = obj[var].rect.left;
+                posY = obj[var].rect.top;
+
+                x = posX = obj[var].rect.left;
+                y = posY = obj[var].rect.top;
+
+
+                sprite.setPosition(x , y);
+                std::cout << "SET_PLAYER_START_POS" << std::endl;
+            }
+        }
+
+        isStart =false;
+    }
+    ////////////////////////////////////////////////
 
     currentFrame += speedAnimation * time ;
 
@@ -98,66 +125,66 @@ void Player::Update(const float& time)
     case STAGE::STAY:
         dx = 0;
         if (currentFrame > imageData->frameCount) currentFrame -= imageData->frameCount;
-        std::cout << "STAGE: " << "STAY" << std::endl;
-        std::cout << "Current Frame: " << currentFrame << std::endl;
+        //std::cout << "STAGE: " << "STAY" << std::endl;
+        //std::cout << "Current Frame: " << currentFrame << std::endl;
         sprite.setTextureRect(sf::IntRect(imageData->W * int(currentFrame) , 0,  imageData->W, imageData->H));
         break;
 
     case STAGE::STAY_JUMP:
         if (currentFrame > imageData->frameCount) currentFrame = imageData->frameCount - 1;
-        std::cout << "STAGE: " << "STAY_JUMP" << std::endl;
-        std::cout << "Current Frame: " << currentFrame << std::endl;
+        //std::cout << "STAGE: " << "STAY_JUMP" << std::endl;
+        //std::cout << "Current Frame: " << currentFrame << std::endl;
         sprite.setTextureRect(sf::IntRect(imageData->W * int(currentFrame) , 0,  imageData->W, imageData->H));
         break;
 
     case STAGE::STAY_DROP:
         if (currentFrame > imageData->frameCount) currentFrame = imageData->frameCount - 1;
-        std::cout << "STAGE: " << "STAY_DROP" << std::endl;
-        std::cout << "Current Frame: " << currentFrame << std::endl;
+        //std::cout << "STAGE: " << "STAY_DROP" << std::endl;
+        //std::cout << "Current Frame: " << currentFrame << std::endl;
         sprite.setTextureRect(sf::IntRect(imageData->W * int(currentFrame) , 0,  imageData->W, imageData->H));
         break;
 
     case STAGE::STAY_SITTING:
         if (currentFrame > imageData->frameCount) currentFrame = imageData->frameCount - 1;
-        std::cout << "STAGE: " << "STAY_SITTING" << std::endl;
-        std::cout << "Current Frame: " << currentFrame << std::endl;
+        //std::cout << "STAGE: " << "STAY_SITTING" << std::endl;
+        //std::cout << "Current Frame: " << currentFrame << std::endl;
         sprite.setTextureRect(sf::IntRect(imageData->W * int(currentFrame) , 0,  imageData->W, imageData->H));
         break;
 
     case STAGE::RUN_RIGHT:
         dx = speed;
         if (currentFrame > imageData->frameCount) currentFrame -= imageData->frameCount;
-        std::cout << "STAGE: " << "RUN_RIGHT" << std::endl;
-        std::cout << "Current Frame: " << currentFrame << std::endl;
+        //std::cout << "STAGE: " << "RUN_RIGHT" << std::endl;
+        //std::cout << "Current Frame: " << currentFrame << std::endl;
         sprite.setTextureRect(sf::IntRect(imageData->W * int(currentFrame) , 0,  imageData->W, imageData->H));
         break;
 
     case STAGE::RUN_LEFT:
         dx = -speed;
         if (currentFrame > imageData->frameCount - 1 ) currentFrame -= imageData->frameCount - 1;
-        std::cout << "STAGE: " << "RUN_LEFT" << std::endl;
-        std::cout << "Current Frame: " << currentFrame << std::endl;
+        //std::cout << "STAGE: " << "RUN_LEFT" << std::endl;
+        //std::cout << "Current Frame: " << currentFrame << std::endl;
         sprite.setTextureRect(sf::IntRect(imageData->W * (int(currentFrame) + 1) , 0,  -imageData->W, imageData->H));
         break;
 
     case STAGE::RUN_JUMP:
         if (currentFrame > imageData->frameCount - 1 ) currentFrame -= imageData->frameCount - 1;
-        std::cout << "STAGE: " << "RUN_JUMP" << std::endl;
-        std::cout << "Current Frame: " << currentFrame << std::endl;
+        //std::cout << "STAGE: " << "RUN_JUMP" << std::endl;
+        //std::cout << "Current Frame: " << currentFrame << std::endl;
         sprite.setTextureRect(sf::IntRect(imageData->W * (int(currentFrame) + 1) , 0,  imageData->W, imageData->H));
         break;
 
     case STAGE::RUN_DROP:
         if (currentFrame > imageData->frameCount - 1 ) currentFrame = imageData->frameCount - 1;
-        std::cout << "STAGE: " << "RUN_DROP" << std::endl;
-        std::cout << "Current Frame: " << currentFrame << std::endl;
+        //std::cout << "STAGE: " << "RUN_DROP" << std::endl;
+        //std::cout << "Current Frame: " << currentFrame << std::endl;
         sprite.setTextureRect(sf::IntRect(imageData->W * (int(currentFrame) + 1) , 0,  imageData->W, imageData->H));
         break;
 
     case STAGE::RUN_SITTING:
         if (currentFrame > imageData->frameCount - 1 ) currentFrame -= imageData->frameCount - 1;
-        std::cout << "STAGE: " << "RUN_SITTING" << std::endl;
-        std::cout << "Current Frame: " << currentFrame << std::endl;
+        //std::cout << "STAGE: " << "RUN_SITTING" << std::endl;
+        //std::cout << "Current Frame: " << currentFrame << std::endl;
         sprite.setTextureRect(sf::IntRect(imageData->W * (int(currentFrame) + 1) , 0,  imageData->W, imageData->H));
         break;
 
@@ -168,12 +195,12 @@ void Player::Update(const float& time)
 
     //sprite.setTextureRect(sf::IntRect(imageData->W * (int(currentFrame) + 1) , 0,  imageData->W, imageData->H));
 
-    std::cout << "SPEED: " << speed << std::endl;
+    //    std::cout << "SPEED: " << speed << std::endl;
 
-    std::cout << "X :" << x << std::endl;
-    std::cout << "Dx:" << dx << std::endl;
-    std::cout << "Y :" << y << std::endl;
-    std::cout << "Dy:" << dy << std::endl;
+    //    std::cout << "X :" << x << std::endl;
+    //    std::cout << "Dx:" << dx << std::endl;
+    //    std::cout << "Y :" << y << std::endl;
+    //    std::cout << "Dy:" << dy << std::endl;
 
     x += dx*time;
     checkCollicionWithMap(dx, 0);
@@ -183,10 +210,10 @@ void Player::Update(const float& time)
 
     //sprite.setPosition(x + w / 2, y + h / 2);
 
-    std::cout << "X :" << x << std::endl;
-    std::cout << "Dx:" << dx << std::endl;
-    std::cout << "Y :" << y << std::endl;
-    std::cout << "Dy:" << dy << std::endl;
+    //    std::cout << "X :" << x << std::endl;
+    //    std::cout << "Dx:" << dx << std::endl;
+    //    std::cout << "Y :" << y << std::endl;
+    //    std::cout << "Dy:" << dy << std::endl;
 
     sprite.setPosition(x , y + h / 2);
 
@@ -200,7 +227,7 @@ void Player::Update(const float& time)
 
     //if (life) { setPlayerCoordinateForView(x, y); }
 
-    dy = dy + 0.0015*time;
+    dy = dy + 0.0015 * time;
 
     //if(dx>0) sprite.scale(-1, 1);
     //if(dx<0) sprite.scale(-1, 1);
@@ -209,7 +236,7 @@ void Player::Update(const float& time)
 
 void Player::checkCollicionWithMap(float Dx, float Dy)
 {
-    for (int i = 0; i<obj.size(); i++)//проходимся по объектам
+    for (size_t i = 0; i < obj.size(); i++)//проходимся по объектам
         if (getRect().intersects(obj[i].rect))//проверяем пересечение игрока с объектом
         {
             if (obj[i].type == "solid"){//если встретили препятствие (объект с именем solid)
