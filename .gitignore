@@ -14,6 +14,10 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 
+# vs
+.vs/
+out/
+
 ### CMake Patch ###
 # External projects
 *-prefix/
